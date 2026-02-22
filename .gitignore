@@ -1,0 +1,16 @@
+﻿# dbt files
+target/
+dbt_packages/
+logs/
+.dbt/
+
+# Credentials
+profiles.yml
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
