@@ -1,9 +1,0 @@
-customer_id,customer_name,email,signup_date,country
-1,John Smith,john.smith@email.com,2024-01-15,USA
-2,Sarah Johnson,sarah.j@email.com,2024-02-20,Canada
-3,Michael Brown,m.brown@email.com,2024-03-10,USA
-4,Emily Davis,emily.davis@email.com,2024-04-05,UK
-5,David Wilson,d.wilson@email.com,2024-05-12,Australia
-6,Jessica Martinez,j.martinez@email.com,2024-06-18,USA
-7,Robert Taylor,r.taylor@email.com,2024-07-22,Canada
-8,Linda Anderson,l.anderson@email.com,2024-08-30,USA

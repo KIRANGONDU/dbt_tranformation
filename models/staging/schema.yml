@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: stg_care_health
+    description: >
+      Staging model for patient admissions.
+      Light cleaning only — rename columns, cast types,
+      standardize strings. Materialized as VIEW.
+
+    columns:
+      - name: patient_name
+        description: "Cleaned patient full name — title case"
+        tests:
+          - not_null
+
+      - name: age
+        description: "Patient age — cast to number"
+        tests:
+          - not_null
+
+      - name: gender
+        description: "Standardized gender"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['MALE','FEMALE','UNKNOWN']
+              config:
+                severity: warn
+
+      - name: date_of_admission
+        description: "Parsed admission date"
+        tests:
+          - not_null
+
+      - name: admission_type
+        description: "Type of admission"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['URGENT','EMERGENCY','ELECTIVE','UNKNOWN']
+              config:
+                severity: warn
+
+      - name: test_results
+        description: "Lab test results"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['NORMAL','ABNORMAL','INCONCLUSIVE','UNKNOWN']
+              config:
+                severity: warn
+
+      - name: billing_amount
+        description: "Billing amount in USD"
+        tests:
+          - not_null

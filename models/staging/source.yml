@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw
+    database: RETAIL_DB
+    schema: RAW
+    tables:
+      - name: orders_data
+      - name: care_health
