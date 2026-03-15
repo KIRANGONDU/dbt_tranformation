@@ -1,0 +1,29 @@
+name: 'care_health_project'
+version: '1.0.0'
+config-version: 2
+
+profile: 'care_health_project'
+
+model-paths:    ["models"]
+seed-paths:     ["seeds"]
+macro-paths:    ["macros"]
+test-paths:     ["tests"]
+analysis-paths: ["analyses"]
+snapshot-paths: ["snapshots"]
+clean-targets:  ["target", "dbt_packages"]
+
+models:
+  care_health_project:
+    staging:
+      +materialized: view
+      +schema: staging
+
+    intermediate:
+      +materialized: incremental
+      +schema: silver
+      +on_schema_change: sync_all_columns
+
+    marts:
+      +materialized: table
+      +schema: gold
+      +tags: ['gold','daily']

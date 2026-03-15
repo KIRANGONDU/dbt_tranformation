@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: int_care_health_cleaned
+    description: >
+      Silver layer — cleaned and enriched patient admissions.
+      Deduplicated by patient_name + date_of_admission.
+      Includes length_of_stay, age_group, severity_level,
+      billing_flag and urgency_label business rules.
+
+    columns:
+      - name: patient_name
+        description: "Patient full name"
+        tests:
+          - not_null
+
+      - name: date_of_admission
+        description: "Admission date"
+        tests:
+          - not_null
+
+      - name: length_of_stay_days
+        description: "Days between admission and discharge"
+        tests:
+          - not_null
+
+      - name: age_group
+        description: "Age group bucket"
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Pediatric','Young Adult','Middle Aged','Senior','Elderly']
+              config:
+                severity: warn
+
+      - name: severity_level
+        description: "Severity based on test results"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['HIGH','MEDIUM','LOW','UNKNOWN']
+              config:
+                severity: warn
+
+      - name: billing_flag
+        description: "ANOMALY if billing < 100 or > 100000"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['ANOMALY','NORMAL']
+              config:
+                severity: warn
+
+      - name: urgency_label
+        description: "Human readable admission urgency"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Critical','High Priority','Planned','Unknown']
+              config:
+                severity: warn
+
+      - name: admission_type
+        description: "Type of admission"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['URGENT','EMERGENCY','ELECTIVE','UNKNOWN']
+              config:
+                severity: warn
+
+      - name: test_results
+        description: "Lab test results"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['NORMAL','ABNORMAL','INCONCLUSIVE','UNKNOWN']
+              config:
+                severity: warn
+
+      - name: billing_amount
+        description: "Billing amount in USD"
+        tests:
+          - not_null
