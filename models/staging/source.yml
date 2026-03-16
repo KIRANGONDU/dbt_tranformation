@@ -2,8 +2,31 @@ version: 2
 
 sources:
   - name: raw
-    database: RETAIL_DB
-    schema: RAW
+    database: RETAIL_DB # ← your exact database name
+    schema:   RAW
+    description: "Raw healthcare data in Snowflake"
     tables:
-      - name: orders_data
       - name: care_health
+        description: "Raw patient admissions loaded from CSV"
+        columns:
+          - name: name
+            description: "Patient full name"
+          - name: billing_amount
+            description: "Total billing amount in USD"
+          - name: medical_condition
+            description: "Primary medical condition"
+          - name: date_of_admission
+            description: "Date of admission"
+          - name: insurance_provider
+            description: "Insurance company"
+          - name: test_results
+            description: "Lab test results"
+          - name: doctor
+            description: "Treating doctor"
+          - name: hospital
+            description: "Hospital name"
+          - name: medication
+            description: "Prescribed medication"
+          - name: discharge_date
+            description: "Discharge date"
+      - name: orders_data

@@ -2,28 +2,64 @@ name: 'care_health_project'
 version: '1.0.0'
 config-version: 2
 
-profile: 'care_health_project'
+profile: 'analytics'
 
 model-paths:    ["models"]
 seed-paths:     ["seeds"]
 macro-paths:    ["macros"]
 test-paths:     ["tests"]
+snapshot-paths: ["snapshots"]    
 analysis-paths: ["analyses"]
-snapshot-paths: ["snapshots"]
 clean-targets:  ["target", "dbt_packages"]
 
+snapshots:
+  analytics:
+    +target_schema: snapshots    
+    +tags: ['snapshot', 'daily']
+
 models:
-  care_health_project:
+  analytics:
     staging:
       +materialized: view
       +schema: staging
+      +pre-hook:
+        - "INSERT INTO AUDIT.PIPELINE_LOG
+           (model_name, hook_type, status, run_timestamp)
+           VALUES ('{{ this.name }}','PRE','STARTED',
+                   CURRENT_TIMESTAMP())"
+      +post-hook:
+        - "INSERT INTO AUDIT.PIPELINE_LOG
+           (model_name, hook_type, status, run_timestamp)
+           VALUES ('{{ this.name }}','POST','COMPLETED',
+                   CURRENT_TIMESTAMP())"
 
     intermediate:
       +materialized: incremental
       +schema: silver
-      +on_schema_change: sync_all_columns
+      +on_schema_change: append_new_columns
+      +pre-hook:
+        - "INSERT INTO AUDIT.PIPELINE_LOG
+           (model_name, hook_type, status, run_timestamp)
+           VALUES ('{{ this.name }}','PRE','STARTED',
+                   CURRENT_TIMESTAMP())"
+      +post-hook:
+        - "INSERT INTO AUDIT.PIPELINE_LOG
+           (model_name, hook_type, status, run_timestamp)
+           VALUES ('{{ this.name }}','POST','COMPLETED',
+                   CURRENT_TIMESTAMP())"
 
     marts:
       +materialized: table
       +schema: gold
       +tags: ['gold','daily']
+      +pre-hook:
+        - "INSERT INTO AUDIT.PIPELINE_LOG
+           (model_name, hook_type, status, run_timestamp)
+           VALUES ('{{ this.name }}','PRE','STARTED',
+                   CURRENT_TIMESTAMP())"
+      +post-hook:
+        - "INSERT INTO AUDIT.PIPELINE_LOG
+           (model_name, hook_type, status, run_timestamp)
+           VALUES ('{{ this.name }}','POST','COMPLETED',
+                   CURRENT_TIMESTAMP())"
+        - "GRANT SELECT ON {{ this }} TO ROLE REPORTER"

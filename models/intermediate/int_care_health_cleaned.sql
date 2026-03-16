@@ -8,7 +8,7 @@
 {{ config(
     materialized     = 'incremental',
     unique_key       = ['patient_name', 'date_of_admission'],
-    on_schema_change = 'sync_all_columns'
+    on_schema_change = 'append_new_columns'
 ) }}
 
 WITH source AS (
